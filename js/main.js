@@ -174,15 +174,10 @@ function cellClicked(event, i, j) {
     if (cell.minesAroundCount === 0) {
         expandShown(gBoard, { i, j });
     }
-    // אם המספר הוא 0 אז צריך לפתוח את כל השכנים. וגם כל השכנים שהם 0 אז צריך לפתוח את כל השכנים וכו
-
-
-
     if (checkWin()) gameOver(true);
 }
 
 function expandShown(board, pos) {
-
     for (var i = pos.i - 1; i <= pos.i + 1 && i < board.length; i++) {
         if (i < 0) continue;
         for (var j = pos.j - 1; j <= pos.j + 1 && j < board[0].length; j++) {
@@ -193,9 +188,13 @@ function expandShown(board, pos) {
             var className = `cell-${i}-${j}`;
             var elCell = document.querySelector(`.${className}`);
 
-            gGame.shownCount++
-                cell.isShown = true;
+            cell.isShown = true;
+            gGame.shownCount++;
             renderCell(elCell, cell.minesAroundCount);
+
+            if (cell.minesAroundCount === 0) {
+                expandShown(gBoard, { i, j });
+            }
         }
     }
 }

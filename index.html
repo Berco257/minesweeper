@@ -1,18 +1,44 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body onload="initGame()">
     <div>
+        <h1>Minesweeper</h1>
         <table>
             <tbody class="board">
 
             </tbody>
         </table>
+        <table class="levels-container">
+            <tbody class="levels">
+                <tr>
+                    <td class="headline">Levels</td>
+                </tr>
+                <tr>
+                    <td onclick="setLevel(4, 2)">Easy</td>
+                </tr>
+                <tr>
+                    <td onclick="setLevel(8, 12)">Hard</td>
+                </tr>
+                <tr>
+                    <td onclick="setLevel(12, 30)">Expert</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+
+    <footer>
+        <p>Development by <a href="mailto:berc.david@gmail.com"> David Bercovici</a> - Full Stack developer
+    </footer>
+
     <script src="js/main.js"></script>
 </body>
 

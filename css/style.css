@@ -4,13 +4,12 @@
 
 div {
     text-align: center;
-    border: black 1px solid;
+    /* border: black 1px solid; */
 }
 
 table {
     display: inline;
     text-align: center;
-    /* border-collapse: collapse; */
 }
 
 td {
@@ -29,14 +28,3 @@ td {
     cursor: pointer;
     font-size: 25px;
 }
-
-
-/* .menu tbody {
-    display: inline;
-    text-align: center;
-}
-
-.menu td {
-    border: black 1px solid;
-    width: max-content;
-} */

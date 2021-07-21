@@ -78,9 +78,9 @@ function renderBoard(board) {
             } else if (cell.isMarked) {
                 content = FLAG;
             }
-
+            var className = `class="cell-${i}-${j}"`;
             var strOnMouseDown = `onmousedown="cellClicked(event, ${i}, ${j})"`;
-            strHTML += `<td ${strOnMouseDown}">${content}</td>`;
+            strHTML += `<td ${className} ${strOnMouseDown}">${content}</td>`;
         }
         strHTML += '</tr>'
     }
@@ -134,6 +134,14 @@ function gameOver(res) {
     renderCell(elEmoji, emoji);
 }
 
+function checkWin() {
+    if (gGame.shownCount === gLevel.SIZE ** 2 - gLevel.MINES &&
+        gGame.markedCount === gLevel.MINES) {
+        return true;
+    }
+    return false
+}
+
 function cellClicked(event, i, j) {
     if (!gGame.isOn) return;
 
@@ -146,21 +154,7 @@ function cellClicked(event, i, j) {
     if (cell.isShown) return;
 
     if (event.button === 2) {
-        if (cell.isMarked) {
-            cell.isMarked = false;
-            gGame.markedCount--;
-            renderCell(event.target, EMPTY);
-        } else {
-            cell.isMarked = true;
-            gGame.markedCount++;
-            renderCell(event.target, FLAG);
-        }
-
-        var elFlagsCount = document.querySelector('.flags');
-        var flagsCount = gLevel.MINES - gGame.markedCount
-        renderCell(elFlagsCount, flagsCount);
-
-        if (checkWin()) gameOver(true);
+        cellMarked(event, cell);
         return;
     }
 
@@ -168,6 +162,7 @@ function cellClicked(event, i, j) {
 
     if (cell.isMine) {
         renderCell(event.target, MINE);
+        revealMines();
         gameOver(false);
         return;
     }
@@ -176,14 +171,43 @@ function cellClicked(event, i, j) {
     gGame.shownCount++;
     renderCell(event.target, cell.minesAroundCount);
 
+
+    // אם המספר הוא 0 אז צריך לפתוח את כל השכנים. וגם כל השכנים שהם 0 אז צריך לפתוח את כל השכנים וכו
+
+
+
     if (checkWin()) gameOver(true);
 }
 
-function checkWin() {
-    if (gGame.markedCount + gGame.shownCount === gLevel.SIZE ** 2) {
-        return true;
+function revealMines() {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            var cell = gBoard[i][j];
+            if (cell.isMine && !cell.isMarked) {
+                var className = `cell-${i}-${j}`;
+                var elMine = document.querySelector(`.${className}`);
+                renderCell(elMine, MINE);
+            }
+        }
     }
-    return false
+}
+
+function cellMarked(event, cell) {
+    if (cell.isMarked) {
+        cell.isMarked = false;
+        gGame.markedCount--;
+        renderCell(event.target, EMPTY);
+    } else {
+        cell.isMarked = true;
+        gGame.markedCount++;
+        renderCell(event.target, FLAG);
+    }
+
+    var elFlagsCount = document.querySelector('.flags');
+    var flagsCount = gLevel.MINES - gGame.markedCount
+    renderCell(elFlagsCount, flagsCount);
+
+    if (checkWin()) gameOver(true);
 }
 
 function getEmptyCells(board) {

@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+
+div {
+    text-align: center;
+    border: black 1px solid;
+}
+
+table {
+    display: inline;
+    text-align: center;
+    /* border-collapse: collapse; */
+}
+
+td {
+    border: black 1px solid;
+    min-width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.menu {
+    cursor: context-menu;
+}
+
+.menu.emoji {
+    cursor: pointer;
+    font-size: 25px;
+}
+
+
+/* .menu tbody {
+    display: inline;
+    text-align: center;
+}
+
+.menu td {
+    border: black 1px solid;
+    width: max-content;
+} */

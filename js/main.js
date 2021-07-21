@@ -154,7 +154,7 @@ function cellClicked(event, i, j) {
     if (cell.isShown) return;
 
     if (event.button === 2) {
-        cellMarked(event, cell);
+        cellMarked(event.target, cell);
         return;
     }
 
@@ -162,7 +162,7 @@ function cellClicked(event, i, j) {
 
     if (cell.isMine) {
         renderCell(event.target, MINE);
-        revealMines();
+        revealMines(gBoard);
         gameOver(false);
         return;
     }
@@ -171,7 +171,9 @@ function cellClicked(event, i, j) {
     gGame.shownCount++;
     renderCell(event.target, cell.minesAroundCount);
 
-
+    if (cell.minesAroundCount === 0) {
+        expandShown(gBoard, { i, j });
+    }
     // אם המספר הוא 0 אז צריך לפתוח את כל השכנים. וגם כל השכנים שהם 0 אז צריך לפתוח את כל השכנים וכו
 
 
@@ -179,10 +181,29 @@ function cellClicked(event, i, j) {
     if (checkWin()) gameOver(true);
 }
 
-function revealMines() {
-    for (var i = 0; i < gBoard.length; i++) {
-        for (var j = 0; j < gBoard[0].length; j++) {
-            var cell = gBoard[i][j];
+function expandShown(board, pos) {
+
+    for (var i = pos.i - 1; i <= pos.i + 1 && i < board.length; i++) {
+        if (i < 0) continue;
+        for (var j = pos.j - 1; j <= pos.j + 1 && j < board[0].length; j++) {
+            var cell = board[i][j];
+            if (j < 0 || (i === pos.i && j === pos.j) ||
+                cell.isMarked || cell.isShown) continue;
+
+            var className = `cell-${i}-${j}`;
+            var elCell = document.querySelector(`.${className}`);
+
+            gGame.shownCount++
+                cell.isShown = true;
+            renderCell(elCell, cell.minesAroundCount);
+        }
+    }
+}
+
+function revealMines(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[0].length; j++) {
+            var cell = board[i][j];
             if (cell.isMine && !cell.isMarked) {
                 var className = `cell-${i}-${j}`;
                 var elMine = document.querySelector(`.${className}`);
@@ -192,15 +213,15 @@ function revealMines() {
     }
 }
 
-function cellMarked(event, cell) {
+function cellMarked(elCell, cell) {
     if (cell.isMarked) {
         cell.isMarked = false;
         gGame.markedCount--;
-        renderCell(event.target, EMPTY);
+        renderCell(elCell, EMPTY);
     } else {
         cell.isMarked = true;
         gGame.markedCount++;
-        renderCell(event.target, FLAG);
+        renderCell(elCell, FLAG);
     }
 
     var elFlagsCount = document.querySelector('.flags');

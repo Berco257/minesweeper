@@ -5,15 +5,18 @@
 body {
     background-color: #cae9ff;
     font-family: cursive;
+    user-select: none;
+    margin-top: 0px;
 }
 
 h1 {
     margin-right: 105px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 div {
     text-align: center;
-    margin-top: 20px;
 }
 
 table {
@@ -23,8 +26,9 @@ table {
 
 td {
     border: #1b4965 1px solid;
-    min-width: 30px;
-    height: 30px;
+    min-width: 33px;
+    max-width: 33px;
+    height: 33px;
     border-radius: 4px;
     cursor: pointer;
     background-color: #4391be;
@@ -53,7 +57,8 @@ td {
 }
 
 .levels td {
-    width: 80px;
+    max-width: 80px;
+    min-width: 80px;
     height: 50px;
     background-color: #c34a4a;
     border: #1b4965 2px solid;
@@ -89,7 +94,7 @@ footer {
 footer a {
     text-decoration: none;
     color: rgb(232, 240, 128);
-    transition: 0.5s;
+    transition: 0.2s;
 }
 
 footer a:hover {

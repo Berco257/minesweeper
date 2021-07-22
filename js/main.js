@@ -3,21 +3,28 @@
 var EMPTY = ' ';
 var MINE = '💣';
 var FLAG = '🚩';
-var EMOJI = {
+var EMOJIS = {
     start: '😊',
     win: '😉',
-    loss: '😵'
+    loss: '😵',
+    step: '😮'
 };
 
+var gCurrEmoji = EMOJIS.start;
 var gBoard;
 var gGame;
-var gMouseButton;
 var gTimerInterval = 0;
 
 var gLevel = {
     size: 12,
     mines: 30
 };
+
+var gWinAudio = new Audio('audio/win.wav');
+var gLossAudio = new Audio('audio/loss.wav');
+
+disableMenu();
+htmlMouseUp();
 
 function gGameInit() {
     gGame = {
@@ -36,8 +43,8 @@ function initGame() {
     gBoard = buildBoard(gLevel.size, gLevel.mines);
     setMines(gBoard, gLevel.mines);
     setMinesNegsCount(gBoard);
+    gCurrEmoji = EMOJIS.start;
     renderBoard(gBoard);
-    disableMenu();
     gGame.isOn = true;
 }
 
@@ -62,7 +69,7 @@ function renderBoard(board) {
     var tdSpan = gLevel.size - 2;
     var strHTML = `<tr>
     <td class="menu flags">${gLevel.mines}</td>
-    <td class="menu emoji" colspan="${tdSpan}" onclick="initGame()">${EMOJI.start}</td>
+    <td class="menu emoji" colspan="${tdSpan}" onclick="initGame()">${EMOJIS.start}</td>
     <td class="menu timer">000</td>
     </tr>`;
 
@@ -78,12 +85,28 @@ function renderBoard(board) {
             }
             var className = `class="cell cell-${i}-${j}"`;
             var strOnMouseUp = `onmouseup="cellClicked(event, ${i}, ${j})"`;
-            strHTML += `<td ${className} ${strOnMouseUp}">${content}</td>`;
+            var strOnMouseDown = `onmousedown="cellOnMouseDown(this)"`;
+            strHTML += `<td ${className} ${strOnMouseUp} ${strOnMouseDown}">${content}</td>`;
         }
         strHTML += '</tr>'
     }
     var elContainer = document.querySelector('.board');
     elContainer.innerHTML = strHTML;
+}
+
+function gameOver(win) {
+    clearInterval(gTimerInterval);
+    gGame.isOn = false;
+
+    if (win) {
+        gWinAudio.play();
+        gCurrEmoji = EMOJIS.win;
+        setEmoji(gCurrEmoji);
+    } else {
+        gLossAudio.play();
+        gCurrEmoji = EMOJIS.loss;
+        setEmoji(gCurrEmoji);
+    }
 }
 
 function setMines(board, minesCount) {
@@ -117,27 +140,6 @@ function getMinesNegsCount(board, pos) {
         }
     }
     return minesCount;
-}
-
-function renderCell(elCell, value) {
-    elCell.innerText = value;
-}
-
-// true = win and false = loss
-function gameOver(res) {
-    clearInterval(gTimerInterval);
-    gGame.isOn = false;
-    var emoji = res ? EMOJI.win : EMOJI.loss;
-    var elEmoji = document.querySelector('.emoji');
-    renderCell(elEmoji, emoji);
-}
-
-function checkWin() {
-    if (gGame.shownCount === gLevel.size ** 2 - gLevel.mines &&
-        gGame.markedCount === gLevel.mines) {
-        return true;
-    }
-    return false
 }
 
 function cellClicked(event, i, j) {
@@ -176,14 +178,6 @@ function cellClicked(event, i, j) {
     if (checkWin()) gameOver(true);
 }
 
-function setLevel(size, mines) {
-    gLevel = {
-        size,
-        mines
-    };
-    initGame();
-}
-
 function expandShown(board, pos) {
     for (var i = pos.i - 1; i <= pos.i + 1 && i < board.length; i++) {
         if (i < 0) continue;
@@ -206,6 +200,14 @@ function expandShown(board, pos) {
             }
         }
     }
+}
+
+function checkWin() {
+    if (gGame.shownCount === gLevel.size ** 2 - gLevel.mines &&
+        gGame.markedCount === gLevel.mines) {
+        return true;
+    }
+    return false
 }
 
 function revealMines(board) {
@@ -250,11 +252,6 @@ function getEmptyCells(board) {
     return emptyCells;
 }
 
-// get random number NOT inclusive max
-function getRandomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
 function startTimer() {
     gGame.startTime = Date.now();
     gTimerInterval = setInterval(function() {
@@ -274,9 +271,43 @@ function startTimer() {
         1000);
 }
 
+function renderCell(elCell, value) {
+    elCell.innerText = value;
+}
+
+function setEmoji(emoji) {
+    var elEmoji = document.querySelector('.emoji');
+    renderCell(elEmoji, emoji);
+}
+
+function setLevel(size, mines) {
+    gLevel = {
+        size,
+        mines
+    };
+    initGame();
+}
+
+// get random number NOT inclusive max
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
 function disableMenu() {
     var elBoard = document.querySelector('.board');
     elBoard.addEventListener('contextmenu', function(event) {
         event.preventDefault();
     });
+}
+
+function htmlMouseUp() {
+    var elHtml = document.querySelector('html');
+    elHtml.addEventListener("mouseup", function() {
+        setEmoji(gCurrEmoji);
+    });
+}
+
+function cellOnMouseDown(elCell) {
+    if (!gGame.isOn) return;
+    setEmoji(EMOJIS.step);
 }

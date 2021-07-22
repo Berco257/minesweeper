@@ -37,6 +37,10 @@ td {
     box-shadow: -1px -1px 0px 0px #7a3838;
 }
 
+.cell:hover {
+    background-color: #87c4e6;
+}
+
 .menu {
     cursor: context-menu;
 }
@@ -128,6 +132,11 @@ td {
     font-size: 40px;
     background-color: unset;
     padding: 10px 0px;
+    cursor: context-menu;
+}
+
+.hints span {
+    cursor: pointer;
 }
 
 .special-container .hints:hover {
@@ -151,23 +160,27 @@ td {
     height: 55px;
     cursor: pointer;
     border-radius: 5px;
-    background-color: rgb(70, 192, 145);
+    background-color: #fffd9e;
     font-weight: bold;
     font-size: 18px;
     color: #08111c;
+    transition: 0.2s;
 }
 
 .safe-click button:hover {
-    background-color: rgb(137, 218, 187);
+    background-color: #ffd59e;
+}
+
+.safe-click-str {
+    font-weight: 100;
 }
 
 .safe-cell {
     background-color: #eeffac;
 }
 
-.dark-bulb {
-    color: transparent;
-    text-shadow: 0 0 0 #675a64;
+.bulb {
+    opacity: 0.2;
 }
 
 .marked {

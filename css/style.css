@@ -10,7 +10,7 @@ body {
 }
 
 h1 {
-    margin-right: 105px;
+    margin-right: 100px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
@@ -56,7 +56,24 @@ td {
     margin-left: 30px;
 }
 
-.levels td {
+.levels-container tr:first-child td:nth-child(2) {
+    min-width: 100px;
+}
+
+.levels-container .score {
+    background-color: unset;
+    border: 0px;
+    color: #1b4965;
+    box-shadow: none;
+    cursor: context-menu;
+}
+
+.levels-container .score:hover {
+    background-color: unset;
+}
+
+.levels td,
+.special td {
     max-width: 80px;
     min-width: 80px;
     height: 50px;
@@ -65,19 +82,97 @@ td {
     transition: 0.2s;
 }
 
-.levels td:hover {
+.levels td:hover,
+.special td:hover {
     background-color: #3e9384;
 }
 
-.levels .headline {
+.levels .headline,
+.special .headline {
     height: 38px;
     border: none;
     cursor: context-menu;
     background-color: #1b4965;
 }
 
-.levels .headline:hover {
+.levels .headline:hover,
+.special .headline:hover {
     background-color: #1b4965;
+}
+
+.special-container {
+    margin-right: 30px;
+    border-spacing: 0px 20px;
+}
+
+.special-container .hearts {
+    height: 75px;
+    background-image: url("../img/heart.png");
+    background-color: unset;
+    background-size: cover;
+    border: 0px;
+    box-shadow: none;
+    font-size: 35px;
+    font-family: sans-serif;
+}
+
+.special-container .hearts:hover {
+    background-color: unset;
+    cursor: context-menu;
+}
+
+.special-container .hints {
+    height: 75px;
+    border: 0px;
+    box-shadow: -1px 0px 2px 0px black;
+    font-size: 40px;
+    background-color: unset;
+    padding: 10px 0px;
+}
+
+.special-container .hints:hover {
+    background-color: unset;
+}
+
+.special-container .safe-click {
+    background-color: unset;
+    border: 0px;
+    box-shadow: none;
+    cursor: context-menu;
+    color: black;
+    font-size: 14px;
+}
+
+.special-container .safe-click:hover {
+    background-color: unset;
+}
+
+.safe-click button {
+    height: 55px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(70, 192, 145);
+    font-weight: bold;
+    font-size: 18px;
+    color: #08111c;
+}
+
+.safe-click button:hover {
+    background-color: rgb(137, 218, 187);
+}
+
+.safe-cell {
+    background-color: #eeffac;
+}
+
+.dark-bulb {
+    color: transparent;
+    text-shadow: 0 0 0 #675a64;
+}
+
+.marked {
+    box-shadow: 0px 0px 0px 0px;
+    background-color: #87c4e6;
 }
 
 footer {
@@ -99,9 +194,4 @@ footer a {
 
 footer a:hover {
     color: rgb(240, 128, 156);
-}
-
-.marked {
-    box-shadow: 0px 0px 0px 0px;
-    background-color: #87c4e6;
 }

@@ -12,34 +12,66 @@
 <body onload="initGame()">
     <div>
         <h1>Minesweeper</h1>
+
+        <table class="special-container">
+            <tbody class="special">
+                <tr>
+                    <td class="headline">Specials</td>
+                </tr>
+                <tr>
+                    <td class="hearts">3</td>
+                </tr>
+                <tr>
+                    <td class="safe-click"><button onclick="safeClick()">Safe Click</button>
+                        <br/>
+                        <span class="safe-click-str">3 clicks available</span></td>
+                </tr>
+                <tr>
+                    <td class="hints" onclick="activateHint(this)">
+                        <span class="dark-bulb">💡</span>
+                        <span class="dark-bulb">💡</span>
+                        <span class="dark-bulb">💡</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
         <table>
-            <tbody class="board">
+            <tbody class="board ">
 
             </tbody>
         </table>
+
         <table class="levels-container">
-            <tbody class="levels">
+            <tbody class="levels ">
                 <tr>
-                    <td class="headline">Levels</td>
+                    <td class="headline ">Levels</td>
+                    <td class="headline">Best Score</td>
+
                 </tr>
                 <tr>
-                    <td onclick="setLevel(4, 2)">Easy</td>
+                    <td onclick="setLevel(4) ">Easy</td>
+                    <td class="score easy-score">000</td>
+
                 </tr>
                 <tr>
-                    <td onclick="setLevel(8, 12)">Hard</td>
+                    <td onclick="setLevel(8) ">Hard</td>
+                    <td class="score hard-score">000</td>
+
                 </tr>
                 <tr>
-                    <td onclick="setLevel(12, 30)">Expert</td>
+                    <td onclick="setLevel(12) ">Expert</td>
+                    <td class="score expert-score">000</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <footer>
-        <p>Development by <a href="mailto:berc.david@gmail.com"> David Bercovici</a> - Full Stack developer
+        <p>Development by <a href="mailto:berc.david@gmail.com "> David Bercovici</a> - Full Stack developer
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js "></script>
 </body>
 
 </html>

@@ -183,6 +183,10 @@ td {
     opacity: 0.2;
 }
 
+.bulb-marked {
+    background-color: #e6c587;
+}
+
 .marked {
     box-shadow: 0px 0px 0px 0px;
     background-color: #87c4e6;

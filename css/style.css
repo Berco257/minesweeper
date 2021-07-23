@@ -192,6 +192,32 @@ td {
     background-color: #87c4e6;
 }
 
+.creative-mode {
+    display: block;
+    margin-top: 180px;
+}
+
+.creative-mode td {
+    border: #000000 2px solid;
+    border-radius: 50%;
+    height: 80px;
+    background-color: #651b54;
+    box-shadow: none;
+    transition: 0.3s;
+}
+
+.creative-mode td:hover {
+    background-color: #1b4665;
+}
+
+.creative-mode-cell {
+    background-color: #cdd1d5;
+}
+
+.creative-mode-cell:hover {
+    background-color: #cdd1d5;
+}
+
 footer {
     position: fixed;
     left: 0;

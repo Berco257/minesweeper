@@ -8,12 +8,14 @@ var EMOJIS = {
     start: '😊',
     win: '😉',
     loss: '😵',
-    step: '😮'
+    step: '😮',
+    creative: '🤓',
 };
 
 var gBoard;
 var gGame;
 var gTimerInterval = 0;
+var gCreativeModeMineCount;
 
 var gLevel = {
     size: 12,
@@ -26,6 +28,8 @@ var gLossAudio = new Audio('audio/loss.wav');
 var gHeartAudio = new Audio('audio/heart.wav');
 var gHintAudio = new Audio('audio/hint.wav');
 var gShowAudio = new Audio('audio/show.wav');
+var gCreativeAudio = new Audio('audio/creative.wav');
+var gCreativeEndAudio = new Audio('audio/creativeEnd.wav');
 
 disableMenu();
 htmlMouseUp();
@@ -34,7 +38,7 @@ renderBestScores();
 function gGameInit() {
     gGame = {
         isOn: false,
-        isFirstClick: false,
+        isFirstClick: true,
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0,
@@ -44,6 +48,7 @@ function gGameInit() {
         isHintActive: false,
         elHint: '',
         safeClickCounter: 3,
+        isCreativeMode: false,
     };
 }
 
@@ -167,10 +172,21 @@ function getMinesNegsCount(board, pos) {
 
 function cellClicked(elCell, i, j) {
     var cell = gBoard[i][j];
+
+    if (gGame.isCreativeMode && gGame.isFirstClick) {
+        creativeModeSetMines(elCell, { i, j });
+        return;
+    }
+
     if (!gGame.isOn || cell.isShown) return;
 
-    if (!gGame.isFirstClick) {
+    if (gGame.isFirstClick) {
         initMinesAndTimerAtFirstClick(i, j);
+    }
+
+    if (gGame.isCreativeMode && !gGame.isFirstClick) {
+        gGame.isCreativeMode = false;
+        startTimer();
     }
 
     if (gGame.isHintActive) {
@@ -206,7 +222,7 @@ function cellMarked(elCell, i, j) {
     var cell = gBoard[i][j];
     if (!gGame.isOn || cell.isShown || gGame.isHintActive) return;
 
-    if (!gGame.isFirstClick) {
+    if (gGame.isFirstClick) {
         initMinesAndTimerAtFirstClick(i, j);
     }
 
@@ -230,7 +246,7 @@ function cellMarked(elCell, i, j) {
 function initMinesAndTimerAtFirstClick(i, j) {
     setMines(gBoard, gLevel.mines, { i, j });
     setMinesNegsCount(gBoard);
-    gGame.isFirstClick = true;
+    gGame.isFirstClick = false;
     startTimer();
 }
 
@@ -271,7 +287,7 @@ function revivePlayer(elCell) {
 }
 
 function activateHint(elHint, isCellClicked = false, pos) {
-    if (!gGame.isOn || !gGame.isFirstClick) return;
+    if (!gGame.isOn || gGame.isFirstClick) return;
 
     if (gGame.isHintActive) {
         gGame.isHintActive = false;
@@ -341,7 +357,7 @@ function toggleHintMarked(type, pos) {
 
 function safeClick() {
     if (!gGame.isOn || !gGame.safeClickCounter ||
-        gGame.isHintActive || !gGame.isFirstClick) return;
+        gGame.isHintActive || gGame.isFirstClick) return;
 
     var emptyCells = getEmptyCellsWithoutMines(gBoard);
     if (!emptyCells.length) return;
@@ -364,6 +380,57 @@ function safeClick() {
         renderCell(elSafe, `${gGame.safeClickCounter} click available`)
     } else {
         renderCell(elSafe, `${gGame.safeClickCounter} clicks available`)
+    }
+}
+
+function creativeMode() {
+    initGame();
+    gGame.isCreativeMode = true;
+    gGame.isOn = false;
+    gCreativeAudio.play();
+    gGame.currEmoji = EMOJIS.creative;
+    setEmoji(gGame.currEmoji);
+    creativeModeChangeCellsColor();
+    gCreativeModeMineCount = 0;
+}
+
+function creativeModeInitGame() {
+    gCreativeEndAudio.play();
+    gGame.currEmoji = EMOJIS.start;
+    setEmoji(gGame.currEmoji);
+    setMinesNegsCount(gBoard);
+    gGame.isFirstClick = false;
+    renderBoard(gBoard);
+    setTimeout(function() {
+        gGame.isOn = true;
+    }, 1000)
+}
+
+function creativeModeSetMines(elCell, pos) {
+    if (gBoard[pos.i][pos.j].isMine) {
+        gBoard[pos.i][pos.j].isMine = false;
+        var elCell = document.querySelector(`.cell-${pos.i}-${pos.j}`);
+        renderCell(elCell, EMPTY);
+        gCreativeModeMineCount--;
+    } else {
+        gBoard[pos.i][pos.j].isMine = true;
+        var elCell = document.querySelector(`.cell-${pos.i}-${pos.j}`);
+        renderCell(elCell, MINE);
+        gCreativeModeMineCount++;
+    }
+    var elFlags = document.querySelector('.flags');
+    var value = gLevel.mines - gCreativeModeMineCount;
+    renderCell(elFlags, value);
+
+    if (!value) creativeModeInitGame();
+}
+
+function creativeModeChangeCellsColor() {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            var elCell = document.querySelector(`.cell-${i}-${j}`);
+            elCell.classList.add('creative-mode-cell');
+        }
     }
 }
 

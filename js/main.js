@@ -17,7 +17,6 @@ var gGame;
 var gTimerInterval = 0;
 var gCreativeModeMineCount;
 var gBoardHistory;
-var gStateHistory;
 
 var gLevel = {
     size: 12,
@@ -66,7 +65,6 @@ function initGame() {
     gGame.isOn = true;
     renderBoard(gBoard);
     gBoardHistory = [];
-    gStateHistory = [];
     saveBoard();
 }
 

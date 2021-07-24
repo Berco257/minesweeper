@@ -194,7 +194,7 @@ td {
 
 .creative-mode {
     display: block;
-    margin-top: 180px;
+    margin-top: 50px;
 }
 
 .creative-mode td {
@@ -203,11 +203,12 @@ td {
     height: 80px;
     background-color: #651b54;
     box-shadow: none;
-    transition: 0.3s;
+    transition: 0.7s;
 }
 
 .creative-mode td:hover {
     background-color: #1b4665;
+    transform: rotate(360deg);
 }
 
 .creative-mode-cell {
@@ -216,6 +217,24 @@ td {
 
 .creative-mode-cell:hover {
     background-color: #cdd1d5;
+}
+
+.undo {
+    display: block;
+    margin-top: 35px;
+    margin-left: -10px;
+}
+
+.undo td {
+    background-color: unset;
+    box-shadow: none;
+    border: unset;
+    font-size: 70px;
+}
+
+.undo td:hover {
+    background-color: unset;
+    transform: rotate(-20deg);
 }
 
 footer {
